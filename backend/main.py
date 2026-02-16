@@ -1,13 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import chat
+from routes import chat, diagnostics
 import uvicorn
 import logging
 import os
 
 logging.basicConfig(level=logging.INFO)
 
-app = FastAPI(title="AI Chatbot API")
+app = FastAPI(title="SmartVahan AI API")
 
 app.add_middleware(
     CORSMiddleware,
@@ -18,10 +18,11 @@ app.add_middleware(
 )
 
 app.include_router(chat.router, prefix="/api")
+app.include_router(diagnostics.router, prefix="/api")
 
 @app.get("/")
 async def root():
-    return {"message": "AI Chatbot API is running"}
+    return {"message": "SmartVahan AI API is running"}
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))

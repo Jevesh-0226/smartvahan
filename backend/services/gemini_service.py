@@ -84,6 +84,38 @@ class GeminiService:
             
             raise e
 
+    async def generate_content(self, prompt: str) -> str:
+        if not self.model:
+            try:
+                self._initialize_model()
+            except ValueError as ve:
+                print(f"Initialization Error: {ve}")
+                raise ve
+
+        try:
+            # Use async version if available, otherwise fallback to sync
+            if hasattr(self.model, 'generate_content_async'):
+                response = await self.model.generate_content_async(prompt)
+            else:
+                response = self.model.generate_content(prompt)
+            return response.text
+        except Exception as e:
+            error_msg = str(e)
+            print(f"Runtime Error in generate_content: {error_msg}")
+            
+            # If the current model fails with a quota/limit error, try ONE emergency fallback to a different model
+            if "quota" in error_msg.lower() or "limit" in error_msg.lower() or "429" in error_msg:
+                print("DEBUG: Quota hit. Attempting emergency switch to next available non-2.0 model...")
+                # Re-initialize skipping the current failing one
+                self._initialize_model() 
+                if hasattr(self.model, 'generate_content_async'):
+                    response = await self.model.generate_content_async(prompt)
+                else:
+                    response = self.model.generate_content(prompt)
+                return response.text
+            
+            raise e
+
 # Singleton instance
 gemini_service = None
 
