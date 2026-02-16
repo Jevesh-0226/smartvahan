@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import SensorCard from './SensorCard';
 import AlertPanel from './AlertPanel';
 import MaintenancePanel from './MaintenancePanel';
+import ModeToggle from './ModeToggle';
 import '../App.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
@@ -98,9 +99,12 @@ const Dashboard = () => {
             <header className="dashboard-header">
                 <div className="header-content">
                     <h1>SmartVahan <span className="subtitle">Vehicle Health Monitor</span></h1>
-                    <div className={`status-indicator-pill ${isCritical ? 'critical' : ''}`}>
-                        <span className={`pulse-dot ${isCritical ? 'red' : 'green'}`}></span>
-                        <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>{diagnosticReport.status}</span>
+                    <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+                        <ModeToggle />
+                        <div className={`status-indicator-pill ${isCritical ? 'critical' : ''}`}>
+                            <span className={`pulse-dot ${isCritical ? 'red' : 'green'}`}></span>
+                            <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>{diagnosticReport.status}</span>
+                        </div>
                     </div>
                 </div>
             </header>

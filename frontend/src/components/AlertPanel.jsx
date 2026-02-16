@@ -32,6 +32,16 @@ const AlertPanel = ({ componentStates, onServiceComplete }) => {
         }
     };
 
+    const getSourceStyle = (source) => {
+        if (source === "Demo Mode") {
+            return { color: '#60A5FA', background: 'rgba(59, 130, 246, 0.1)' }; // Blue
+        }
+        if (source === "Fallback System" || source === "Fallback Mode" || source === "CONNECTION FAILED") {
+            return { color: '#FFA500', background: 'rgba(255, 165, 0, 0.1)' }; // Orange
+        }
+        return { color: 'var(--accent-teal)', background: 'rgba(0, 179, 164, 0.1)' }; // Teal (Gemini/Default)
+    };
+
     const flaggedComponents = Object.values(componentStates || {}).filter(c => c.flagged);
 
     return (
@@ -56,6 +66,7 @@ const AlertPanel = ({ componentStates, onServiceComplete }) => {
                         flaggedComponents.map((comp) => {
                             const isExpanded = expandedId === comp.id;
                             const isServicing = servicingId === comp.id;
+                            const sourceStyle = getSourceStyle(comp.diagnosis?.diagnosisSource);
 
                             return (
                                 <div
@@ -68,7 +79,13 @@ const AlertPanel = ({ componentStates, onServiceComplete }) => {
                                             <span style={{ color: 'var(--accent-red)', fontWeight: 700, fontSize: '0.95rem' }}>
                                                 ⚠ {comp.name.toUpperCase()}
                                             </span>
-                                            <span style={{ fontSize: '0.7rem', color: 'var(--accent-teal)', background: 'rgba(0,179,164,0.1)', padding: '2px 6px', borderRadius: '4px' }}>
+                                            <span style={{
+                                                fontSize: '0.7rem',
+                                                color: sourceStyle.color,
+                                                background: sourceStyle.background,
+                                                padding: '2px 6px',
+                                                borderRadius: '4px'
+                                            }}>
                                                 {comp.diagnosis?.diagnosisSource || "Analyzing..."}
                                             </span>
                                         </div>
@@ -81,7 +98,7 @@ const AlertPanel = ({ componentStates, onServiceComplete }) => {
                                         <div className="diag-report-area" onClick={(e) => e.stopPropagation()}>
                                             <div className="report-section">
                                                 <h4>TECHNICAL CAUSE</h4>
-                                                <p>{comp.diagnosis?.cause || "Connecting to live diagnostic source..."}</p>
+                                                <p>{comp.diagnosis?.cause || "Connecting to diagnostic source..."}</p>
                                             </div>
                                             <div className="report-section" style={{ marginTop: '12px' }}>
                                                 <h4>SYSTEM EFFECT</h4>

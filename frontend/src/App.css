@@ -305,3 +305,75 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 179, 164, 0.3);
 }
+/* Mode Toggle */
+.mode-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mode-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.mode-toggle-btn.demo {
+  border-color: #3B82F6; /* Blue for Demo */
+  background: rgba(59, 130, 246, 0.1);
+  color: #60A5FA;
+}
+
+.mode-toggle-btn.real {
+  border-color: #10B981; /* Green for Real */
+  background: rgba(16, 185, 129, 0.1);
+  color: #34D399;
+}
+
+.mode-toggle-btn .status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+}
+
+.mode-toggle-btn.demo .status-dot {
+  background: #3B82F6;
+  box-shadow: 0 0 8px #3B82F6;
+}
+
+.mode-toggle-btn.real .status-dot {
+  background: #10B981;
+  box-shadow: 0 0 8px #10B981;
+}
+
+.mode-toggle.loading {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    padding: 8px;
+}
+
+/* Delete Record Button */
+.delete-record-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    opacity: 0.6;
+}
+.delete-record-btn:hover {
+    opacity: 1;
+    background: rgba(255, 77, 77, 0.1);
+    transform: scale(1.1);
+}

@@ -27,6 +27,34 @@ const MaintenancePanel = () => {
         return () => clearInterval(interval);
     }, []);
 
+    const handleDelete = async (e, record_id) => {
+        e.stopPropagation();
+
+        if (!record_id) {
+            alert("This record cannot be deleted (ID missing).");
+            return;
+        }
+
+        if (!window.confirm("Are you sure you want to delete this maintenance record?")) return;
+
+        try {
+            const response = await fetch(`${API_URL}/maintenance/${record_id}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                // Optimistic update
+                setHistory(prev => prev.filter(item => item.id !== record_id));
+            } else {
+                console.error("Delete failed");
+                alert("Failed to delete record. It may have been modified externally.");
+            }
+        } catch (e) {
+            console.error("Delete Error:", e);
+            alert("Server communication error.");
+        }
+    };
+
     return (
         <div className="panel-container">
             <div className="diagnostic-panel">
@@ -46,12 +74,21 @@ const MaintenancePanel = () => {
                         </div>
                     ) : (
                         history.map((record) => (
-                            <div key={record.global_id} className="history-item">
+                            <div key={record.id || record.global_id} className="history-item">
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                                     <div className="history-comp-name">{record.component_name}</div>
-                                    <span style={{ color: 'var(--accent-teal)', fontSize: '0.7rem', fontWeight: 600, opacity: 0.8 }}>
-                                        {record.diagnosisSource === "Gemini Live" ? "✓ LIVE AI VERIFIED" : record.diagnosisSource}
-                                    </span>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                        <span style={{ color: 'var(--accent-teal)', fontSize: '0.7rem', fontWeight: 600, opacity: 0.8 }}>
+                                            {record.diagnosisSource === "Gemini Live" ? "✓ LIVE AI VERIFIED" : record.diagnosisSource}
+                                        </span>
+                                        <button
+                                            className="delete-record-btn"
+                                            title="Delete Record"
+                                            onClick={(e) => handleDelete(e, record.id)}
+                                        >
+                                            🗑️
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div className="history-grid-info">

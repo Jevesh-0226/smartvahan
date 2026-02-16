@@ -1,8 +1,8 @@
-import asyncio
 import time
 import re
 import os
 import json
+import uuid
 from datetime import datetime, timedelta
 from typing import List, Dict, Any, Optional
 from models.sensor_models import (
@@ -10,6 +10,8 @@ from models.sensor_models import (
     MaintenanceRecord, ComponentState
 )
 from services.gemini_service import get_gemini_service
+from services.mode_service import get_mode_service
+from services.demo_response_service import get_demo_service
 
 # Persistence paths
 STATE_FILE = "vehicle_state.json"
@@ -51,7 +53,17 @@ def load_data():
         try:
             with open(HISTORY_FILE, 'r') as f:
                 data = json.load(f)
+                # Ensure compatibility with existing records
+                for h in data:
+                    if 'id' not in h:
+                        h['id'] = str(uuid.uuid4())
+                        
                 history = [MaintenanceRecord(**h) for h in data]
+                
+                # Persist ID updates immediately if needed
+                if any('id' not in h for h in data): # Note: This check logic is subtle as we modified data in place
+                    pass # We will save on next update, or could save now. 
+                    
         except Exception as e: print(f"Load History Error: {e}")
             
     return states, history
@@ -73,6 +85,10 @@ async def analyze_sensor_data(data: SensorData) -> DiagnosticReport:
     }
 
     gemini = get_gemini_service()
+    mode_service = get_mode_service()
+    demo_service = get_demo_service()
+    
+    is_demo_mode = mode_service.get_mode()
 
     for key, val in sensor_map.items():
         state = component_states[key]
@@ -99,14 +115,20 @@ async def analyze_sensor_data(data: SensorData) -> DiagnosticReport:
         elif key == "tire_pressure" and (val < (threshold - 4) or val > (threshold + 10)): is_triggered = True
         
         if is_triggered:
-            # Trigger AI ONCE per breach
+            # Trigger AI ONCE per breach - only if not already flagged
             if not state.flagged:
                 state.flagged = True
                 state.status = "critical"
                 persist_needed = True
                 
-                # PART 2 - HIGH QUALITY AI PROMPT
-                prompt = f"""You are an advanced automotive diagnostic AI.
+                if is_demo_mode:
+                    # DEMO MODE LOGIC
+                    print(f"[DEMO] Generating DEMO response for: {state.name}")
+                    state.diagnosis = demo_service.get_demo_diagnosis(state.name, val, state.unit, threshold)
+                
+                else:
+                    # REAL MODE (GEMINI) LOGIC
+                    prompt = f"""You are an advanced automotive diagnostic AI.
 
 A vehicle component has exceeded its safe threshold.
 
@@ -138,39 +160,54 @@ Rules:
 - No bullet symbols.
 - No introductory sentence."""
 
-                try:
-                    # PART 1 - LIVE GEMINI CALL
-                    response_text = await gemini.generate_content(prompt)
+                    # Call Gemini with proper error handling
+                    response = await gemini.get_diagnostic_analysis(key, prompt)
                     
-                    # LOG RAW RESPONSE FOR VALIDATION
-                    print(f"\n[AI DEBUG] GEMINI RAW RESPONSE FOR {state.name}:")
-                    print("-" * 50)
-                    print(response_text)
-                    print("-" * 50)
+                    if response["success"]:
+                        # Successful AI response
+                        response_text = response["text"]
+                        
+                        # LOG RAW RESPONSE FOR VALIDATION
+                        print(f"\n[AI DEBUG] GEMINI RAW RESPONSE FOR {state.name}:", flush=True)
+                        print("-" * 50, flush=True)
+                        print(response_text, flush=True)
+                        print("-" * 50, flush=True)
 
-                    # PART 3 - ROBUST PARSING
-                    def parse_section(section_name, text):
-                        pattern = rf"{section_name}:\s*(.*?)(?=\n[A-Z]+:|$)"
-                        match = re.search(pattern, text, re.DOTALL | re.IGNORECASE)
-                        return match.group(1).strip() if match else "Analysis failed - Check ECU connection."
+                        # ROBUST PARSING
+                        def parse_section(section_name, text):
+                            pattern = rf"{section_name}:\s*(.*?)(?=\n[A-Z]+:|$)"
+                            match = re.search(pattern, text, re.DOTALL | re.IGNORECASE)
+                            return match.group(1).strip() if match else "Analysis failed - Check ECU connection."
 
-                    state.diagnosis = DiagnosticAnalysis(
-                        cause=parse_section("CAUSE", response_text),
-                        effect=parse_section("EFFECT", response_text),
-                        solution=parse_section("SOLUTION", response_text),
-                        prevention=parse_section("PREVENTION", response_text),
-                        diagnosisSource="Gemini Live"
-                    )
-                except Exception as e:
-                    print(f"GEMINI LIVE ERROR: {e}")
-                    # No generic fallback, explicitly show error
-                    state.diagnosis = DiagnosticAnalysis(
-                        cause=f"ERROR: Could not reach Gemini AI ({str(e)})",
-                        effect="Diagnostic services unavailable.",
-                        solution="Ensure API Key is valid and restart server.",
-                        prevention="N/A",
-                        diagnosisSource="CONNECTION FAILED"
-                    )
+                        state.diagnosis = DiagnosticAnalysis(
+                            cause=parse_section("CAUSE", response_text),
+                            effect=parse_section("EFFECT", response_text),
+                            solution=parse_section("SOLUTION", response_text),
+                            prevention=parse_section("PREVENTION", response_text),
+                            diagnosisSource=response["source"]
+                        )
+                    else:
+                        # Fallback response (quota exceeded, rate limited, etc.)
+                        response_text = response["text"]
+                        
+                        print(f"\n[FALLBACK] Using fallback response for {state.name}")
+                        print(f"Source: {response['source']}")
+                        
+                        # Parse fallback response (already in correct format)
+                        def parse_section(section_name, text):
+                            pattern = rf"{section_name}:\s*(.*?)(?=\n[A-Z]+:|$)"
+                            match = re.search(pattern, text, re.DOTALL | re.IGNORECASE)
+                            return match.group(1).strip() if match else "Service temporarily unavailable."
+
+                        state.diagnosis = DiagnosticAnalysis(
+                            cause=parse_section("CAUSE", response_text),
+                            effect=parse_section("EFFECT", response_text),
+                            solution=parse_section("SOLUTION", response_text),
+                            prevention=parse_section("PREVENTION", response_text),
+                            diagnosisSource=response["source"]
+                        )
+            # If already flagged, do NOT call AI again (prevents repeated calls)
+
         else:
             # Reset only on manual Service Now click
             pass
@@ -213,6 +250,7 @@ def perform_service(component_name: str) -> bool:
 
         # PART 5 - MAINTENANCE HISTORY PERSISTENCE
         maintenance_history.insert(0, MaintenanceRecord(
+            id=str(uuid.uuid4()),
             global_id=global_id,
             component_name=state.name,
             service_date=datetime.now().strftime("%d %b %Y %H:%M"),
@@ -238,3 +276,13 @@ def perform_service(component_name: str) -> bool:
 
 def get_maintenance_history() -> List[MaintenanceRecord]:
     return maintenance_history
+
+def delete_maintenance_record(record_id: str) -> bool:
+    global maintenance_history
+    initial_count = len(maintenance_history)
+    maintenance_history = [r for r in maintenance_history if r.id != record_id]
+    
+    if len(maintenance_history) < initial_count:
+        save_data(component_states, maintenance_history)
+        return True
+    return False

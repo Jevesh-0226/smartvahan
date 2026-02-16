@@ -47,6 +47,7 @@ class ServiceRequest(BaseModel):
     component_name: str
 
 class MaintenanceRecord(BaseModel):
+    id: Optional[str] = None
     global_id: int
     component_name: str
     service_date: str
@@ -57,3 +58,6 @@ class MaintenanceRecord(BaseModel):
     prevention: str
     service_count: int
     diagnosisSource: str = "Gemini Live"
+
+class ModeRequest(BaseModel):
+    mode: str
