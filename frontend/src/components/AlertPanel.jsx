@@ -3,146 +3,114 @@ import '../App.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
-const AlertPanel = ({ activeAlerts, onServiceComplete }) => {
-    const [expanded, setExpanded] = useState(null);
-    const [servicing, setServicing] = useState("");
+const AlertPanel = ({ componentStates, onServiceComplete }) => {
+    const [expandedId, setExpandedId] = useState(null);
+    const [servicingId, setServicingId] = useState(null);
 
-    const toggleExpand = (componentName) => {
-        setExpanded(expanded === componentName ? null : componentName);
+    const toggleExpand = (id) => {
+        setExpandedId(expandedId === id ? null : id);
     };
 
-    const handleService = async (componentName) => {
-        setServicing(componentName);
+    const handleService = async (e, id) => {
+        e.stopPropagation();
+        setServicingId(id);
         try {
             const response = await fetch(`${API_URL}/service-complete`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ component_name: componentName })
+                body: JSON.stringify({ component_name: id })
             });
 
             if (response.ok) {
-                onServiceComplete(componentName);
-            } else {
-                alert("Service failed on backend");
+                onServiceComplete(id);
+                setExpandedId(null);
             }
         } catch (e) {
-            console.error("Service Error", e);
+            console.error("Diagnostic Reset Failure:", e);
         } finally {
-            setServicing("");
+            setServicingId(null);
         }
     };
 
-    const alertKeys = Object.keys(activeAlerts || {});
-
-    if (alertKeys.length === 0) {
-        return (
-            <div className="alert-section" style={{ textAlign: 'center', color: '#64748b' }}>
-                <h3>Diagnostic Status</h3>
-                <p>System Healthy. No critical issues detected.</p>
-                <div style={{ fontSize: '4rem', opacity: 0.2 }}>✓</div>
-            </div>
-        );
-    }
+    const flaggedComponents = Object.values(componentStates || {}).filter(c => c.flagged);
 
     return (
-        <div className="alert-section">
-            <div className="alert-header">
-                <span style={{ color: '#ef4444' }}>⚠</span>
-                <span>Active Alerts ({alertKeys.length})</span>
-            </div>
-
-            {alertKeys.map((componentName) => {
-                const alertData = activeAlerts[componentName];
-                const aiData = alertData.analysis;
-                const isExpanded = expanded === componentName;
-                const isServicing = servicing === componentName;
-
-                return (
-                    <div key={componentName} className="alert-item">
-                        <div
-                            style={{ display: 'flex', justifyContent: 'space-between', cursor: 'pointer', alignItems: 'center' }}
-                            onClick={() => toggleExpand(componentName)}
-                        >
-                            <div>
-                                <h3 style={{ margin: 0, textTransform: 'capitalize' }}>🚨 {componentName.replace(/_/g, ' ')} Alert</h3>
-                                <div style={{ fontSize: '0.9rem', color: '#cbd5e1', marginTop: '4px' }}>
-                                    Critical Value: {alertData.value} {alertData.unit}
-                                </div>
-                                <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '2px' }}>
-                                    Active for: {Math.floor((Date.now() - alertData.timestamp) / 1000)} seconds
-                                </div>
-                            </div>
-                            <div style={{ transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}>▼</div>
-                        </div>
-
-                        {isExpanded && aiData && (
-                            <div className="ai-analysis">
-                                <div style={{ marginBottom: '10px', fontSize: '0.9rem', color: '#f59e0b', fontWeight: 'bold' }}>
-                                    AI DIAGNOSTIC ANALYSIS
-                                </div>
-
-                                <div className="analysis-grid">
-                                    <div className="analysis-box">
-                                        <h4>Possible Causes</h4>
-                                        <ul>
-                                            {aiData.possible_causes?.map((cause, i) => <li key={i}>{cause}</li>) || <li>Wait for analysis...</li>}
-                                        </ul>
-                                    </div>
-
-                                    <div className="analysis-box">
-                                        <h4>Immediate Actions</h4>
-                                        <ul>
-                                            {aiData.immediate_actions?.map((action, i) => <li key={i} style={{ color: '#f87171' }}>{action}</li>)}
-                                        </ul>
-                                    </div>
-
-                                    <div className="analysis-box">
-                                        <h4>Review & Risk</h4>
-                                        <p style={{ fontSize: '0.9rem', margin: 0 }}>
-                                            <strong style={{ color: '#f59e0b' }}>Severity:</strong> {aiData.severity}<br />
-                                            <strong style={{ color: '#f59e0b' }}>Risk:</strong> {aiData.risk_ignored}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div style={{ marginTop: '20px', borderTop: '1px solid #334155', paddingTop: '15px' }}>
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleService(componentName);
-                                        }}
-                                        disabled={isServicing}
-                                        style={{
-                                            width: '100%',
-                                            padding: '12px',
-                                            background: isServicing ? '#64748b' : '#10b981',
-                                            color: 'white',
-                                            border: 'none',
-                                            borderRadius: '8px',
-                                            cursor: isServicing ? 'wait' : 'pointer',
-                                            fontWeight: 'bold',
-                                            fontSize: '1rem',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            gap: '10px'
-                                        }}
-                                    >
-                                        {isServicing ? 'Processing...' : '🔧 Mark Service Done'}
-                                    </button>
-                                    <p style={{ fontSize: '0.8rem', color: '#94a3b8', textAlign: 'center', marginTop: '10px' }}>
-                                        Click only after designated maintenance is completed. System will reset component health.
-                                    </p>
-                                </div>
-                            </div>
-                        )}
-
-                        {isExpanded && !aiData && (
-                            <div className="ai-analysis">Analyzing data with Gemini AI...</div>
-                        )}
+        <div className="panel-container">
+            <div className="diagnostic-panel">
+                <div className="panel-header-fixed" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <h3 style={{ margin: 0, fontSize: '1.2rem', color: 'var(--accent-teal)' }}>
+                        ECU Diagnostic Monitor
+                    </h3>
+                    <div style={{ fontSize: '0.65rem', padding: '4px 8px', background: 'rgba(0,179,164,0.1)', borderRadius: '4px', color: 'var(--accent-teal)' }}>
+                        Live AI Stream
                     </div>
-                );
-            })}
+                </div>
+
+                <div className="panel-content-scroll">
+                    {flaggedComponents.length === 0 ? (
+                        <div className="healthy-state">
+                            <div className="check-icon">✓</div>
+                            <p style={{ margin: 0, fontSize: '0.9rem' }}>System Healthy. No intervention required.</p>
+                        </div>
+                    ) : (
+                        flaggedComponents.map((comp) => {
+                            const isExpanded = expandedId === comp.id;
+                            const isServicing = servicingId === comp.id;
+
+                            return (
+                                <div
+                                    key={comp.id}
+                                    className={`alert-card ${isExpanded ? 'expanded' : ''}`}
+                                    onClick={() => toggleExpand(comp.id)}
+                                >
+                                    <div className="alert-main-info">
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                                            <span style={{ color: 'var(--accent-red)', fontWeight: 700, fontSize: '0.95rem' }}>
+                                                ⚠ {comp.name.toUpperCase()}
+                                            </span>
+                                            <span style={{ fontSize: '0.7rem', color: 'var(--accent-teal)', background: 'rgba(0,179,164,0.1)', padding: '2px 6px', borderRadius: '4px' }}>
+                                                {comp.diagnosis?.diagnosisSource || "Analyzing..."}
+                                            </span>
+                                        </div>
+                                        <div style={{ fontSize: '0.85rem', color: 'var(--text-primary)' }}>
+                                            Anomaly detected at <strong>{comp.value.toFixed(1)}{comp.unit}</strong>
+                                        </div>
+                                    </div>
+
+                                    {isExpanded && (
+                                        <div className="diag-report-area" onClick={(e) => e.stopPropagation()}>
+                                            <div className="report-section">
+                                                <h4>TECHNICAL CAUSE</h4>
+                                                <p>{comp.diagnosis?.cause || "Connecting to live diagnostic source..."}</p>
+                                            </div>
+                                            <div className="report-section" style={{ marginTop: '12px' }}>
+                                                <h4>SYSTEM EFFECT</h4>
+                                                <p style={{ color: '#FCA5A5' }}>{comp.diagnosis?.effect}</p>
+                                            </div>
+                                            <div className="report-section" style={{ marginTop: '12px' }}>
+                                                <h4>REPAIR SOLUTION</h4>
+                                                <p style={{ color: '#CBD5E1' }}>{comp.diagnosis?.solution}</p>
+                                            </div>
+                                            <div className="report-section" style={{ marginTop: '12px' }}>
+                                                <h4>PREVENTION ADVISORY</h4>
+                                                <p style={{ color: '#94A3B8' }}>{comp.diagnosis?.prevention}</p>
+                                            </div>
+
+                                            <button
+                                                className="service-now-btn"
+                                                onClick={(e) => handleService(e, comp.id)}
+                                                disabled={isServicing}
+                                            >
+                                                {isServicing ? 'Initiating Reset...' : 'SERVICE NOW'}
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })
+                    )}
+                </div>
+            </div>
         </div>
     );
 };
