@@ -46,6 +46,11 @@ except Exception as e:
 
 logging.info("[STARTUP] Application initialized successfully")
 
+@app.get("/ping")
+async def ping():
+    """Simple ping endpoint for testing Railway connectivity"""
+    return {"status": "ok", "message": "pong"}
+
 @app.get("/")
 async def root():
     return {"message": "SmartVahan AI API is running"}
@@ -71,9 +76,17 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
+    import os
+    
+    # Use environment variables if available (Railway compatibility)
+    host = os.getenv("HOST", "0.0.0.0")
+    port = int(os.getenv("PORT", 8000))
+    
+    logging.info(f"[LOCAL] Starting server on {host}:{port}")
+    
     uvicorn.run(
         "main:app",
-        host="127.0.0.1",
-        port=8000,
+        host=host,
+        port=port,
         reload=False
     )
