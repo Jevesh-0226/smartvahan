@@ -3,7 +3,9 @@ import os
 from pathlib import Path
 
 # File-based state persistence (Railway-compatible)
-MODE_STATE_FILE = "mode_state.json"
+# Use absolute path to ensure it works regardless of working directory
+BASE_DIR = Path(__file__).resolve().parent.parent
+MODE_STATE_FILE = os.path.join(BASE_DIR, "mode_state.json")
 
 class ModeService:
     def __init__(self):
@@ -64,8 +66,27 @@ class ModeService:
             return True
 
 # Singleton instance
-mode_service = ModeService()
+try:
+    mode_service = ModeService()
+    print("[MODE SERVICE] Singleton instance created successfully")
+except Exception as e:
+    print(f"[MODE SERVICE ERROR] Failed to create singleton: {e}")
+    # Create a minimal fallback instance
+    mode_service = None
 
 def get_mode_service():
     """Get the singleton mode service instance"""
+    global mode_service
+    if mode_service is None:
+        try:
+            mode_service = ModeService()
+        except Exception as e:
+            print(f"[MODE SERVICE ERROR] Failed to create mode service: {e}")
+            # Return a dummy service that always returns demo mode
+            class DummyModeService:
+                def get_mode(self):
+                    return True  # Always demo
+                def set_mode(self, is_demo):
+                    return False  # Always fail
+            return DummyModeService()
     return mode_service
