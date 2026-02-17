@@ -13,9 +13,23 @@ from services.gemini_service import get_gemini_service
 from services.mode_service import get_mode_service
 from services.demo_response_service import get_demo_service
 
-# Persistence paths
-STATE_FILE = "vehicle_state.json"
-HISTORY_FILE = "service_history.json"
+# Persistence paths - Railway compatible
+# Try to use local directory, fallback to /tmp if not writable
+def get_data_file_path(filename):
+    """Get writable path for data files"""
+    try:
+        # Try current directory
+        if os.path.exists(filename) or os.access(".", os.W_OK):
+            return filename
+    except:
+        pass
+    # Fallback to /tmp for Railway
+    return f"/tmp/{filename}"
+
+STATE_FILE = get_data_file_path("vehicle_state.json")
+HISTORY_FILE = get_data_file_path("service_history.json")
+print(f"[DIAGNOSTIC SERVICE] Using STATE_FILE: {STATE_FILE}")
+print(f"[DIAGNOSTIC SERVICE] Using HISTORY_FILE: {HISTORY_FILE}")
 
 def save_data(states, history):
     try:
