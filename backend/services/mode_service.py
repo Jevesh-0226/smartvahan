@@ -3,9 +3,28 @@ import os
 from pathlib import Path
 
 # File-based state persistence (Railway-compatible)
-# Use absolute path to ensure it works regardless of working directory
-BASE_DIR = Path(__file__).resolve().parent.parent
-MODE_STATE_FILE = os.path.join(BASE_DIR, "mode_state.json")
+# Railway's filesystem is ephemeral, but /tmp is writable
+# Try multiple locations in order of preference
+def get_state_file_path():
+    """Get the best available path for mode_state.json"""
+    # Option 1: Try current directory (works locally and some deployments)
+    try:
+        BASE_DIR = Path(__file__).resolve().parent.parent
+        path = os.path.join(BASE_DIR, "mode_state.json")
+        # Test if writable
+        test_path = os.path.join(BASE_DIR, ".write_test")
+        with open(test_path, 'w') as f:
+            f.write("test")
+        os.remove(test_path)
+        return path
+    except:
+        pass
+    
+    # Option 2: Use /tmp directory (Railway-compatible)
+    return "/tmp/mode_state.json"
+
+MODE_STATE_FILE = get_state_file_path()
+print(f"[MODE SERVICE] Using state file: {MODE_STATE_FILE}")
 
 class ModeService:
     def __init__(self):

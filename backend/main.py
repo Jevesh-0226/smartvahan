@@ -28,21 +28,28 @@ app.add_middleware(
 app.include_router(chat.router, prefix="/api")
 app.include_router(diagnostics.router, prefix="/api")
 
-@app.on_event("startup")
-async def startup_event():
-    """Initialize mode service on startup"""
+@app.get("/")
+async def root():
+    return {"message": "SmartVahan AI API is running"}
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for Railway"""
     try:
         from services.mode_service import get_mode_service
         mode_service = get_mode_service()
         current_mode = "demo" if mode_service.get_mode() else "real"
-        logging.info(f"[STARTUP] Mode service initialized. Current mode: {current_mode}")
+        return {
+            "status": "healthy",
+            "mode_service": "initialized",
+            "current_mode": current_mode
+        }
     except Exception as e:
-        logging.error(f"[STARTUP ERROR] Failed to initialize mode service: {e}")
-        # Don't crash the app, just log the error
-
-@app.get("/")
-async def root():
-    return {"message": "SmartVahan AI API is running"}
+        return {
+            "status": "degraded",
+            "mode_service": "error",
+            "error": str(e)
+        }
 
 if __name__ == "__main__":
     import uvicorn
