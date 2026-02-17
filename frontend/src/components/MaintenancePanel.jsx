@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+import API_URL from '../config';
 
 const MaintenancePanel = () => {
     const [history, setHistory] = useState([]);

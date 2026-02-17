@@ -5,7 +5,7 @@ import MaintenancePanel from './MaintenancePanel';
 import ModeToggle from './ModeToggle';
 import '../App.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+import API_URL from '../config';
 
 const Dashboard = () => {
     const [sensorData, setSensorData] = useState({
