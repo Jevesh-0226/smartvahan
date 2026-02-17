@@ -25,8 +25,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(chat.router, prefix="/api")
-app.include_router(diagnostics.router, prefix="/api")
+# Include routers with error handling
+try:
+    logging.info("[STARTUP] Including chat router...")
+    app.include_router(chat.router, prefix="/api")
+    logging.info("[STARTUP] Chat router included successfully")
+except Exception as e:
+    logging.error(f"[STARTUP ERROR] Failed to include chat router: {e}")
+    import traceback
+    traceback.print_exc()
+
+try:
+    logging.info("[STARTUP] Including diagnostics router...")
+    app.include_router(diagnostics.router, prefix="/api")
+    logging.info("[STARTUP] Diagnostics router included successfully")
+except Exception as e:
+    logging.error(f"[STARTUP ERROR] Failed to include diagnostics router: {e}")
+    import traceback
+    traceback.print_exc()
+
+logging.info("[STARTUP] Application initialized successfully")
 
 @app.get("/")
 async def root():
