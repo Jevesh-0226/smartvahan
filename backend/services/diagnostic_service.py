@@ -56,6 +56,14 @@ def load_data():
     states = default_states
     history = []
     
+    # Create files if they don't exist
+    if not os.path.exists(STATE_FILE):
+        try:
+            print(f"[DIAGNOSTIC SERVICE] Creating initial STATE_FILE: {STATE_FILE}")
+            save_data(default_states, [])
+        except Exception as e:
+            print(f"[DIAGNOSTIC SERVICE ERROR] Failed to create STATE_FILE: {e}")
+    
     if os.path.exists(STATE_FILE):
         try:
             with open(STATE_FILE, 'r') as f:
