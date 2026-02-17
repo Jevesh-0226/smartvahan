@@ -89,6 +89,7 @@ async def analyze_sensor_data(data: SensorData) -> DiagnosticReport:
     demo_service = get_demo_service()
     
     is_demo_mode = mode_service.get_mode()
+    print(f"[DIAGNOSTIC SERVICE] Processing with mode: {'DEMO' if is_demo_mode else 'REAL'}")
 
     for key, val in sensor_map.items():
         state = component_states[key]

@@ -8,10 +8,19 @@ logging.basicConfig(level=logging.INFO)
 
 app = FastAPI(title="SmartVahan AI API")
 
+# CORS Configuration for Production
+# Add your Vercel deployment URL here
+allowed_origins = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "https://smartvahan.vercel.app",  # Replace with your actual Vercel domain
+    "https://*.vercel.app",  # Allow all Vercel preview deployments
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
+    allow_origins=["*"],  # In production, replace with allowed_origins list above
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )

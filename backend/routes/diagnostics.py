@@ -28,13 +28,41 @@ async def delete_maintenance_endpoint(record_id: str):
 
 @router.post("/set-mode")
 async def set_mode_endpoint(request: ModeRequest):
+    """
+    Set the application mode (demo or real)
+    Mode is persisted to mode_state.json for Railway compatibility
+    """
     mode_service = get_mode_service()
     is_demo = request.mode.lower() == "demo"
-    mode_service.set_mode(is_demo)
-    return {"currentMode": "demo" if is_demo else "real"}
+    
+    # Update mode in file
+    success = mode_service.set_mode(is_demo)
+    
+    if not success:
+        raise HTTPException(status_code=500, detail="Failed to update mode")
+    
+    mode_value = "demo" if is_demo else "real"
+    print(f"[SET-MODE ENDPOINT] Mode changed to: {mode_value}")
+    
+    return {
+        "success": True,
+        "mode": mode_value,
+        "currentMode": mode_value  # For backward compatibility
+    }
 
 @router.get("/get-mode")
 async def get_mode_endpoint():
+    """
+    Get the current application mode from mode_state.json
+    """
     mode_service = get_mode_service()
     is_demo = mode_service.get_mode()
-    return {"currentMode": "demo" if is_demo else "real"}
+    mode_value = "demo" if is_demo else "real"
+    
+    print(f"[GET-MODE ENDPOINT] Current mode: {mode_value}")
+    
+    return {
+        "mode": mode_value,
+        "currentMode": mode_value  # For backward compatibility
+    }
+
