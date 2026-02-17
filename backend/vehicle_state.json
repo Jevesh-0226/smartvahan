@@ -1,0 +1,79 @@
+{
+  "engine_temperature": {
+    "id": "engine_temperature",
+    "name": "Engine Thermal",
+    "value": 92.63679546687362,
+    "threshold": 105.0,
+    "unit": "\u00b0C",
+    "status": "normal",
+    "flagged": false,
+    "recentlyServiced": false,
+    "serviceCooldownEnd": null,
+    "diagnosis": null,
+    "serviceCount": 3
+  },
+  "oil_pressure": {
+    "id": "oil_pressure",
+    "name": "Liquid Pressure",
+    "value": 17.854475504739792,
+    "threshold": 25.0,
+    "unit": "PSI",
+    "status": "normal",
+    "flagged": false,
+    "recentlyServiced": true,
+    "serviceCooldownEnd": 1771305001.6311588,
+    "diagnosis": null,
+    "serviceCount": 5
+  },
+  "brake_wear": {
+    "id": "brake_wear",
+    "name": "Friction Material",
+    "value": 21.949050649707775,
+    "threshold": 85.0,
+    "unit": "%",
+    "status": "normal",
+    "flagged": false,
+    "recentlyServiced": false,
+    "serviceCooldownEnd": null,
+    "diagnosis": null,
+    "serviceCount": 1
+  },
+  "battery_voltage": {
+    "id": "battery_voltage",
+    "name": "Energy Storage",
+    "value": 8.244527797219877,
+    "threshold": 11.5,
+    "unit": "V",
+    "status": "critical",
+    "flagged": true,
+    "recentlyServiced": false,
+    "serviceCooldownEnd": null,
+    "diagnosis": {
+      "cause": "The voltage drop to 8.2V indicates a severe state of deep discharge or internal cell failure within the 12V energy storage system. This level of depletion typically stems from a sustained parasitic draw exceeding the alternator's replenishment rate or advanced plate sulfation causing an internal short circuit. At this specific value, multiple cells have likely dropped below their critical electrochemical threshold, rendering the battery unable to maintain a nominal charge even under minimal load conditions.",
+      "effect": "Operating at 8.2V causes critical system instability as most Electronic Control Units require a minimum of 9.0V to maintain logic processing and communication over the CAN bus. This low-voltage state triggers a cascade of false fault codes, disables the starter solenoid, and risks permanent damage to the battery's chemical composition through irreversible deep discharge. Continued attempts to operate the vehicle at this voltage can overheat the alternator diodes and stress the electrical distribution network beyond designed thermal limits.",
+      "solution": "1. Perform a high-rate discharge load test or a digital conductance test to evaluate the internal health of the battery and determine if the plates are physically damaged.\n2. Execute a parasitic draw test using an ammeter in series with the negative terminal to identify malfunctioning modules that are failing to enter sleep mode.\n3. Replace the energy storage unit if it fails to hold a stabilized charge above 12.4V after a slow-saturation charging cycle of at least twelve hours.\n4. Inspect and clean all battery terminals and primary chassis grounds with a wire brush to ensure optimal electrical conductivity and prevent voltage drops.",
+      "prevention": "1. Conduct quarterly battery health assessments using a dedicated tester to monitor internal resistance and cold cranking amp capacity relative to the original specifications.\n2. Utilize a microprocessor-controlled battery maintainer if the vehicle remains stationary for more than seven consecutive days to counteract natural self-discharge and parasitic loads.\n3. Ensure the alternator drive belt tension and charging system output are verified during every scheduled oil change to maintain consistent energy replenishment.",
+      "diagnosisSource": "Gemini AI"
+    },
+    "serviceCount": 2
+  },
+  "tire_pressure": {
+    "id": "tire_pressure",
+    "name": "Pneumatic Load",
+    "value": 19.807572857047315,
+    "threshold": 28.0,
+    "unit": "PSI",
+    "status": "critical",
+    "flagged": true,
+    "recentlyServiced": false,
+    "serviceCooldownEnd": null,
+    "diagnosis": {
+      "cause": "The primary mechanical cause for the pressure drop to 19.64 PSI is likely a structural breach in the pneumatic bellows or a failure in the solenoid valve block seals. A secondary cause could be a malfunctioning height control valve that is failing to signal the compressor for additional air despite the load requirements. Electrical resistance or corrosion at the pressure sensor connector can also result in inaccurate data transmission to the control module, preventing the system from reaching the 28.0 PSI operational threshold.",
+      "effect": "Operating below the 28.0 PSI safety limit results in insufficient lift capacity, forcing the suspension to bottom out and transfer high-frequency road vibrations directly into the chassis. This lack of pneumatic damping leads to accelerated wear on the control arm bushings and puts excessive strain on the vehicle frame and drivetrain components. Continued operation under these conditions significantly increases the risk of loss of control during emergency maneuvers and may cause irreversible damage to the air compressor due to excessive duty cycles.",
+      "solution": "Step 1. Utilize an ultrasonic leak detector or soap solution to inspect the air springs and pneumatic lines for any signs of escaping air while the system is under load.\nStep 2. Use a professional-grade diagnostic tool to check the air suspension control module for fault codes related to the pressure sensors or compressor relay.\nStep 3. Replace any compromised pneumatic springs or valves and then perform a system-wide recalibration of the ride height sensors to factory specifications.\nStep 4. Test the air compressor output to ensure it can reach and sustain pressures above the 28.0 PSI threshold without overheating or excessive noise.",
+      "prevention": "1. Inspect the air bellows and pneumatic lines every 15,000 miles for signs of abrasion, dry rot, or debris accumulation that could lead to structural leaks.\n2. Replace the air dryer desiccant cartridge annually to prevent moisture buildup from corroding the internal solenoid valves and causing mechanical blockages.\n3. Ensure the height control linkages are kept clean and lubricated to prevent mechanical sticking that leads to inaccurate pressure regulation and sensor errors.",
+      "diagnosisSource": "Gemini AI"
+    },
+    "serviceCount": 1
+  }
+}

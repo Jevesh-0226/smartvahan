@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css';
 
-import API_URL from '../config';
+import API_URL from '../services/config';
 
 const MaintenancePanel = () => {
     const [history, setHistory] = useState([]);

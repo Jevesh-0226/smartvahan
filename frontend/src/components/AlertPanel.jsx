@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../App.css';
 
-import API_URL from '../config';
+import API_URL from '../services/config';
 
 const AlertPanel = ({ componentStates, onServiceComplete }) => {
     const [expandedId, setExpandedId] = useState(null);

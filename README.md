@@ -1,81 +1,66 @@
-# Professional AI Chatbot Web Application
+# 🚗 SmartVahan — AI-Powered Vehicle Diagnostics
 
-A modern, aesthetic, and production-ready chatbot application built with FastAPI (Python) and React (Vite). Powered by Google Gemini AI.
+SmartVahan is a modern, professional, and production-ready vehicle diagnostic platform that leverages AI to monitor vehicle health in real-time. Built with a robust FastAPI backend and a high-performance React frontend, it provides intelligent insights into vehicle performance using Google's Gemini 1.5 Flash model.
 
-## 🚀 Features
+## 🌟 Key Features
 
-- **Modern UI**: Clean, responsive design with glassmorphism and smooth animations.
-- **Real-time Interaction**: Instant AI responses with a typing indicator.
-- **Conversation Context**: Remembers previous messages in the session.
-- **Professional Backend**: Built with FastAPI, featuring modular architecture and error handling.
-- **Secure**: API keys are stored only in the backend environment.
+- **Dual-Mode Operation**: 
+  - **Demo Mode**: Simulate vehicle issues with high-fidelity mock data.
+  - **Real Mode**: Live AI diagnostics using Google Gemini for accurate real-world analysis.
+- **Persistent State**: Industry-safe persistence of application mode across server restarts.
+- **Predictive Maintenance**: Smart analysis of sensor data to predict the next service requirement.
+- **Aesthetic Dashboard**: Premium, glassmorphism UI with real-time health indicators and maintenance logs.
+- **Stateless Ready**: Architected to work seamlessly in stateless cloud environments like Railway and Vercel.
 
 ## 🛠 Tech Stack
 
-- **Frontend**: React (Vite), CSS3 (Custom Design System).
-- **Backend**: Python FastAPI.
-- **AI Model**: Google Gemini 1.5 Flash.
-- **Tools**: Pydantic, Dotenv, Google Generative AI Python SDK.
+- **Frontend**: React 19 (Vite), Custom CSS3 Design System.
+- **Backend**: Python 3.10+ FastAPI.
+- **AI Core**: Google Gemini 1.5 Flash API.
+- **Persistence**: File-based persistent storage (/tmp compatible for Railway).
+- **Deployment**: Vercel (Frontend) & Railway (Backend).
 
 ## 📂 Project Structure
 
 ```text
-ai-chatbot/
+SmartVahan/
 ├── backend/
-│   ├── main.py              # Entry point
-│   ├── routes/              # API endpoints
-│   ├── services/            # AI service logic
-│   ├── models/              # Data models
-│   ├── .env                 # Environment variables (Create this)
-│   └── requirements.txt      # Python dependencies
+│   ├── main.py              # Application entry point
+│   ├── routes/              # API endpoints (Diagnostics, Chat, Modes)
+│   ├── services/            # Core business & AI logic
+│   ├── models/              # Pydantic data schemas
+│   └── requirements.txt     # Backend dependencies
 └── frontend/
     ├── src/
-    │   ├── App.jsx          # Main chat interface
-    │   └── App.css          # Modern styling
-    └── index.html           # HTML template
+    │   ├── components/      # Modular UI components
+    │   ├── config.js        # Environment configuration
+    │   └── App.jsx          # Main application shell
+    └── package.json         # Frontend dependencies
 ```
 
-## ⚙️ Setup Instructions
+## ⚙️ Quick Start
 
-### 1. Backend Setup
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
-2. Create a virtual environment and activate it:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. Create a `.env` file based on `.env.example` and add your **GEMINI_API_KEY**.
-5. Start the backend:
-   ```bash
-   uvicorn main:app --reload
-   ```
+### 1. Backend Setup (FastAPI)
+1. Navigate to the backend directory: `cd backend`
+2. Install dependencies: `pip install -r requirements.txt`
+3. Create a `.env` file from `.env.example` and add your `GEMINI_API_KEY`.
+4. Run the server: `uvicorn main.py:app --reload`
+   - Access API documentation at `http://localhost:8000/docs`
 
-### 2. Frontend Setup
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
+### 2. Frontend Setup (React)
+1. Navigate to the frontend directory: `cd frontend`
+2. Install dependencies: `npm install`
+3. Start the dev server: `npm run dev`
+4. Access the dashboard at `http://localhost:5173`
 
 ## 🔑 Environment Variables
 
-The backend requires the following in `.env`:
-- `GEMINI_API_KEY`: Your API key from [Google AI Studio](https://aistudio.google.com/).
-- `PORT`: (Optional) Default is 8000.
+The backend requires:
+- `GEMINI_API_KEY`: Obtain from [Google AI Studio](https://aistudio.google.com/).
+- `PORT`: (Managed by Railway in production).
+
+The frontend requires:
+- `VITE_API_URL`: Path to your backend API.
 
 ---
-Built for portfolio demonstration.
+© 2026 SmartVahan — Intelligent Vehicle Care.

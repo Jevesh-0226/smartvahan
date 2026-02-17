@@ -5,7 +5,7 @@ import MaintenancePanel from './MaintenancePanel';
 import ModeToggle from './ModeToggle';
 import '../App.css';
 
-import API_URL from '../config';
+import API_URL from '../services/config';
 
 const Dashboard = () => {
     const [sensorData, setSensorData] = useState({
