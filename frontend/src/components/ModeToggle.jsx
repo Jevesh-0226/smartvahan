@@ -1,101 +1,51 @@
-import React, { useState, useEffect } from 'react';
+/**
+ * ModeToggle – Ultra-Instant Demo/Real Mode Switch
+ *
+ * Performance contract:
+ * ✅ ZERO network requests on toggle
+ * ✅ ZERO async operations on toggle
+ * ✅ ZERO loading state
+ * ✅ GPU-accelerated CSS transition (transform: translateZ(0))
+ * ✅ Mode persisted via localStorage (no backend needed at startup)
+ * ✅ Next message sent to backend carries the correct mode via store
+ */
 
-import API_URL from '../services/config';
+import React, { useCallback } from 'react';
+import useModeStore from '../stores/modeStore';
 
-const ModeToggle = () => {
-    const [mode, setMode] = useState('demo'); // Default to demo
-    const [loading, setLoading] = useState(true);
+const ModeToggle = React.memo(() => {
+    // Fine-grained Zustand subscriptions — only re-renders this component
+    const mode = useModeStore((s) => s.mode);
+    const toggleMode = useModeStore((s) => s.toggleMode);
 
-    // Fetch current mode on component mount
-    useEffect(() => {
-        console.log('[MODE TOGGLE] Fetching current mode from backend...');
-
-        fetch(`${API_URL}/get-mode`)
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error(`Failed to fetch mode: ${res.status}`);
-                }
-                return res.json();
-            })
-            .then(data => {
-                const currentMode = data.currentMode || data.mode || 'demo';
-                setMode(currentMode);
-                setLoading(false);
-                console.log(`[MODE TOGGLE] Initial mode set to: ${currentMode}`);
-            })
-            .catch(err => {
-                console.error("[MODE TOGGLE] Failed to fetch mode:", err);
-                // Default to demo mode on error
-                setMode('demo');
-                setLoading(false);
-            });
-    }, []);
-
-    const toggleMode = async () => {
-        const newMode = mode === 'demo' ? 'real' : 'demo';
-        const previousMode = mode;
-
-        // Optimistic update
-        setMode(newMode);
-        setLoading(true);
-
-        try {
-            console.log(`[MODE TOGGLE] Switching from ${previousMode} to ${newMode}`);
-
-            const res = await fetch(`${API_URL}/set-mode`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mode: newMode })
-            });
-
-            if (!res.ok) {
-                throw new Error(`Server responded with ${res.status}`);
-            }
-
-            const data = await res.json();
-
-            // Confirm mode from server response
-            const confirmedMode = data.currentMode || data.mode;
-            setMode(confirmedMode);
-
-            console.log(`[MODE TOGGLE] Successfully switched to ${confirmedMode} mode`);
-
-            // Show success notification (you can replace with a toast library)
-            showNotification(`Switched to ${confirmedMode.toUpperCase()} mode`, 'success');
-
-        } catch (err) {
-            console.error("[MODE TOGGLE ERROR]", err);
-
-            // Revert to previous mode on error
-            setMode(previousMode);
-
-            showNotification(`Failed to switch mode: ${err.message}`, 'error');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Simple notification function (can be replaced with react-toastify or similar)
-    const showNotification = (message, type) => {
-        console.log(`[NOTIFICATION] ${type.toUpperCase()}: ${message}`);
-        // TODO: Integrate with a proper toast notification library
-    };
-
-
-    if (loading) return <div className="mode-toggle loading">...</div>;
+    const handleClick = useCallback(() => {
+        toggleMode(); // purely synchronous, in-memory, <1ms
+    }, [toggleMode]);
 
     const isDemo = mode === 'demo';
 
     return (
         <button
-            onClick={toggleMode}
+            id="mode-toggle-btn"
+            onClick={handleClick}
             className={`mode-toggle-btn ${isDemo ? 'demo' : 'real'}`}
             title={`Click to switch to ${isDemo ? 'Real' : 'Demo'} Mode`}
+            aria-label={`Current mode: ${isDemo ? 'Demo' : 'Real'}. Click to switch.`}
+            aria-pressed={!isDemo}
         >
-            <span className="status-dot"></span>
-            {isDemo ? 'Demo Mode Active' : 'Real Mode Active'}
+            {/* GPU-accelerated indicator dot */}
+            <span className="status-dot" aria-hidden="true" />
+            <span className="mode-label">
+                {isDemo ? 'Demo Mode' : 'Real Mode'}
+            </span>
+            {/* Small badge indicating AI source */}
+            <span className="mode-badge" aria-hidden="true">
+                {isDemo ? 'Simulated' : 'Live AI'}
+            </span>
         </button>
     );
-};
+});
+
+ModeToggle.displayName = 'ModeToggle';
 
 export default ModeToggle;

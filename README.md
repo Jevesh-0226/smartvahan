@@ -44,7 +44,7 @@ SmartVahan/
 1. Navigate to the backend directory: `cd backend`
 2. Install dependencies: `pip install -r requirements.txt`
 3. Create a `.env` file from `.env.example` and add your `GEMINI_API_KEY`.
-4. Run the server: `uvicorn main.py:app --reload`
+4. Run the server: `uvicorn main:app --reload`
    - Access API documentation at `http://localhost:8000/docs`
 
 ### 2. Frontend Setup (React)
