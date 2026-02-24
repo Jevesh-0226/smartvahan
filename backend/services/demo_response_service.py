@@ -64,6 +64,27 @@ class DemoResponseService:
             diagnosisSource="Demo Mode"
         )
 
+    def get_demo_chat_response(self, user_message: str) -> str:
+        """Friendly mock chat response for Demo Mode with pre-trained logic"""
+        msg = user_message.lower()
+        
+        # Pre-trained: How is the vehicle
+        if "how is" in msg or "status" in msg or "vehicle" in msg:
+            return "In this Demo Simulation, your vehicle is operating within nominal parameters. All critical sensors (thermal, pressure, voltage) are being monitored in real-time. If any value exceeds its safety threshold, I will immediately flag it in the ECU Diagnostic Monitor."
+
+        # Pre-trained: When is next service
+        if "service" in msg or "maintenance" in msg:
+            return "Based on the simulated telemetry, your next preventative maintenance should be scheduled in approximately 3,500 miles. However, in Real Mode, I would calculate this dynamically based on actual component wear and sensor trends."
+
+        responses = [
+            "I'm operating in Demo Mode right now. In this mode, I simulate advanced automotive diagnostics to show you how the system works.",
+            "That's a great question about your vehicle! While I'm in Demo Mode, I can tell you that real-time monitoring is active and I'm ready to analyze telemetry as soon as a breach occurs.",
+            "Vehicle systems are all nominal in this simulation. If you switch to Real Mode, I'll use Gemini AI to give you live, professional-grade insights.",
+            "I'm the SmartVahan AI. My job is to watch over your car's critical systems like engine temp, oil pressure, and tire health.",
+            "Check out the ECU monitor on the right to see live alerts! I'm currently simulating a typical vehicle health profile."
+        ]
+        return random.choice(responses)
+
 # Singleton instance
 demo_service = DemoResponseService()
 

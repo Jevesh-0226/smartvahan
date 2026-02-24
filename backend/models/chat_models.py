@@ -10,6 +10,7 @@ class Message(BaseModel):
 class ChatRequest(BaseModel):
     message: str
     history: List[Message] = []
+    mode: Optional[str] = "demo"  # Added to support zero-lag mode switching
 
 class ChatResponse(BaseModel):
     response: str

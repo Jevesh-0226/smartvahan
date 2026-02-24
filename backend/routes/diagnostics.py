@@ -8,7 +8,8 @@ router = APIRouter()
 
 @router.post("/sensor-data", response_model=DiagnosticReport)
 async def sensor_data_endpoint(data: SensorData):
-    return await analyze_sensor_data(data)
+    # Mode is passed in the payload to support ultra-smooth instant switching (ZERO toggle latency)
+    return await analyze_sensor_data(data, mode=data.mode)
 
 @router.post("/service-complete")
 async def service_complete_endpoint(request: ServiceRequest):

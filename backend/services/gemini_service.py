@@ -22,6 +22,14 @@ class GeminiService:
         self.last_call_time = {}  # Track last call time per component for rate limiting
         self.cooldown_seconds = 60  # Cooldown between AI calls per component
 
+        # Eager initialization — model is ready before first request arrives
+        # Avoids visible latency spike on the first chat message
+        try:
+            self._initialize_model()
+            logger.info("[STARTUP] Gemini model pre-initialized successfully")
+        except Exception as e:
+            logger.warning(f"[STARTUP] Gemini model pre-init failed (will retry on first use): {e}")
+
     def _initialize_model(self):
         """Initialize Gemini model with proper error handling"""
         if not self.api_key:
@@ -242,10 +250,19 @@ Regular system health monitoring and log review.""",
             
             return f"I apologize, but I encountered an error: {error_msg}"
 
-# Singleton instance
-gemini_service = None
+# ── Singleton (initialized ONCE at module import / server startup) ─────────
+# By initializing here (not inside the endpoint), the model is warm and
+# ready to serve the first request without any noticeable delay.
+try:
+    gemini_service = GeminiService()
+    logger.info("[STARTUP] GeminiService singleton created successfully")
+except Exception as e:
+    gemini_service = None
+    logger.error(f"[STARTUP] GeminiService singleton creation failed: {e}")
 
-def get_gemini_service():
+
+def get_gemini_service() -> GeminiService:
+    """Return the singleton GeminiService. Lazily creates if startup failed."""
     global gemini_service
     if gemini_service is None:
         gemini_service = GeminiService()

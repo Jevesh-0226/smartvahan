@@ -93,7 +93,7 @@ def load_data():
 # Global in-memory containers synced with files
 component_states, maintenance_history = load_data()
 
-async def analyze_sensor_data(data: SensorData) -> DiagnosticReport:
+async def analyze_sensor_data(data: SensorData, mode: Optional[str] = None) -> DiagnosticReport:
     global component_states
     current_time = time.time()
     persist_needed = False
@@ -110,8 +110,16 @@ async def analyze_sensor_data(data: SensorData) -> DiagnosticReport:
     mode_service = get_mode_service()
     demo_service = get_demo_service()
     
-    is_demo_mode = mode_service.get_mode()
-    print(f"[DIAGNOSTIC SERVICE] Processing with mode: {'DEMO' if is_demo_mode else 'REAL'}")
+    # Prioritize mode from request payload for zero-lag switching
+    request_mode = mode or data.mode
+    if request_mode:
+        is_demo_mode = (request_mode.lower() == "demo")
+        # Keep global state in sync defensively
+        mode_service.set_mode(is_demo_mode)
+    else:
+        is_demo_mode = mode_service.get_mode()
+        
+    print(f"[DIAGNOSTIC SERVICE] Processing (Mode: {'DEMO' if is_demo_mode else 'REAL'})", flush=True)
 
     for key, val in sensor_map.items():
         state = component_states[key]

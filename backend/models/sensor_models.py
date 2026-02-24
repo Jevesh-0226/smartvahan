@@ -8,6 +8,7 @@ class SensorData(BaseModel):
     brake_wear: float
     battery_voltage: float
     tire_pressure: float
+    mode: Optional[str] = "demo"  # Added to support zero-lag mode switching
 
 class DiagnosticAnalysis(BaseModel):
     cause: str
