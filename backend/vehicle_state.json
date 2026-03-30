@@ -2,7 +2,7 @@
   "engine_temperature": {
     "id": "engine_temperature",
     "name": "Engine Thermal",
-    "value": 96.44777056886613,
+    "value": 104.91167151091582,
     "threshold": 105.0,
     "unit": "\u00b0C",
     "status": "critical",
@@ -10,18 +10,18 @@
     "recentlyServiced": false,
     "serviceCooldownEnd": null,
     "diagnosis": {
-      "cause": "The breach of the 105.0 \u00b0C threshold often stems from a degradation in heat exchange efficiency within the pressurized cooling system. This can be caused by a partially sticking thermostat that fails to fully open or a reduction in airflow through the radiator core due to external debris or internal scaling. Additionally, a minor leak in the cooling system pressure cap can lower the boiling point of the coolant, leading to localized vapor pockets and reduced thermal conductivity.",
-      "effect": "Operating consistently above the design threshold causes accelerated thermal expansion in cylinder head gaskets and cylinder liners, potentially leading to catastrophic seal failure. Sustained high temperatures also degrade the viscosity of engine oil, reducing its lubricating film strength and increasing friction between critical internal components like camshafts and crankshaft bearings. If left unaddressed, the risk of warping the aluminum cylinder head or cracking the engine block increases significantly as the system enters a thermal runaway state.",
-      "solution": "1. Perform a comprehensive pressure test of the cooling system to identify internal or external leaks and verify the integrity of the radiator cap pressure relief valve.\n2. Use a diagnostic scan tool to monitor real-time data from the engine coolant temperature sensor and command the high-speed cooling fan relays to ensure full electromechanical functionality.\n3. Flush the existing coolant and replace it with the manufacturer-specified ethylene glycol mixture while simultaneously installing a new high-flow thermostat to restore proper thermal regulation.",
-      "prevention": "1. Establish a scheduled cooling system service every 50,000 miles to replace aged coolant and prevent the buildup of corrosive sludge that restricts narrow coolant passages.\n2. Inspect all serpentine belts and coolant hoses annually for signs of glazing, dry rot, or bulging to ensure the water pump is driven at full efficiency and system integrity is maintained.",
-      "diagnosisSource": "Gemini AI"
+      "cause": "The marginal exceedance of the engine thermal threshold suggests a subtle compromise in the cooling system's efficiency. This could be due to a thermostat that is beginning to stick or is slightly slow to open fully, thus restricting adequate coolant flow to the radiator. Alternatively, a minor air pocket trapped within the cooling system can create localized hot spots or impede overall heat dissipation, leading to a fractional temperature rise. Reduced thermal transfer efficiency from an accumulation of internal scale or external debris on the radiator fins, or even an aging coolant with degraded properties, can also contribute to this slight but significant elevation.",
+      "effect": "Operating the engine consistently, even slightly above its optimal thermal threshold, accelerates the degradation of engine oil, compromising its critical lubricating and cooling capabilities over time. This sustained mild overheating places undue stress on cooling system components such as hoses, seals, and plastic reservoirs, making them prone to premature cracking, leaks, or outright failure. If this minor temperature elevation is not addressed, it signals an underlying issue that could escalate rapidly, potentially leading to severe overheating, which risks cylinder head warpage, head gasket failure, and catastrophic internal engine damage, resulting in extensive and costly repairs.",
+      "solution": "1. Conduct a thorough visual inspection of the entire cooling system, checking for any visible coolant leaks, damaged or swollen hoses, obstructed radiator fins, and verify the coolant reservoir level and fluid clarity.\n2. With the engine cooled, remove the radiator cap to confirm proper coolant level, then perform a cooling system pressure test to identify any internal or external leaks that might not be visible.\n3. Test the thermostat for proper operation by monitoring its opening and closing temperatures, and confirm that the engine cooling fan activates at the specified temperature and operates with sufficient airflow.",
+      "prevention": "1. Adhere strictly to the manufacturer's recommended service schedule for cooling system flushes and coolant replacement, ensuring the correct type and concentration of coolant are always used.\n2. Periodically inspect the radiator and condenser for any accumulation of debris, bent fins, or other obstructions that could impede proper airflow, and verify the cooling fan's consistent and robust operation.\n3. Proactively check all cooling system hoses for signs of swelling, cracking, or softening, and replace the radiator cap at recommended intervals to ensure the system maintains optimal pressure.",
+      "diagnosisSource": "Demo Mode"
     },
-    "serviceCount": 3
+    "serviceCount": 4
   },
   "oil_pressure": {
     "id": "oil_pressure",
     "name": "Liquid Pressure",
-    "value": 24.840022228718937,
+    "value": 17.410407257289688,
     "threshold": 25.0,
     "unit": "PSI",
     "status": "critical",
@@ -35,31 +35,25 @@
       "prevention": "1. Perform regular oil and filter changes using high-quality synthetic oil that meets the manufacturer's specific viscosity requirements.\n2. Monitor engine sounds for ticking or knocking, which can be early indicators of lubrication issues before pressure drops critically.\n3. Use premium oil filters with anti-drain back valves to ensure immediate oil pressure on startup.",
       "diagnosisSource": "Demo Mode"
     },
-    "serviceCount": 5
+    "serviceCount": 6
   },
   "brake_wear": {
     "id": "brake_wear",
     "name": "Friction Material",
-    "value": 85.31044202388902,
+    "value": 43.84396750071292,
     "threshold": 85.0,
     "unit": "%",
-    "status": "critical",
-    "flagged": true,
+    "status": "normal",
+    "flagged": false,
     "recentlyServiced": false,
     "serviceCooldownEnd": null,
-    "diagnosis": {
-      "cause": "The brake wear sensor has detected that the friction material on the brake pads has worn down to the minimum safe thickness, triggering the electrical circuit to close. This is a normal result of friction and usage over time, but accelerated wear can be caused by seized caliper slide pins, a sticking caliper piston, or driving habits involving frequent, heavy braking. In rare cases, a warped rotor can cause uneven pad contact, leading to premature wear on one side of the vehicle.",
-      "effect": "Driving with worn brake pads significantly increases stopping distances and reduces overall braking efficiency, posing a severe safety risk to the driver and others. Once the friction material is depleted, the metal backing plate will grind directly against the rotor, causing deep scoring and permanent damage that necessitates costly rotor replacement. Furthermore, the excessive heat generated by metal-on-metal contact can lead to brake fade or complete system failure during emergency stops.",
-      "solution": "1. Remove the wheels and inspect the brake pads on all four corners to confirm wear levels and rule out sensor malfunction.\n2. Replace brake pads in axle sets (both front or both rear) and inspect rotors for thickness and runout; resurface or replace rotors if necessary.\n3. Clean and lubricate caliper slide pins and contact points to ensure smooth operation and prevent future uneven wear.",
-      "prevention": "1. Inspect brake pad thickness at every tire rotation or oil change service interval.\n2. Adopt a driving style that utilizes engine braking where appropriate to reduce thermal load and wear on the friction components.\n3. Ensure brake fluid is flushed every 2 years to prevent moisture buildup that can cause internal caliper corrosion and seizing.",
-      "diagnosisSource": "Demo Mode"
-    },
-    "serviceCount": 1
+    "diagnosis": null,
+    "serviceCount": 2
   },
   "battery_voltage": {
     "id": "battery_voltage",
     "name": "Energy Storage",
-    "value": 12.74128616378349,
+    "value": 8.064339935018705,
     "threshold": 11.5,
     "unit": "V",
     "status": "critical",
@@ -67,18 +61,18 @@
     "recentlyServiced": false,
     "serviceCooldownEnd": null,
     "diagnosis": {
-      "cause": "The voltage drop to 8.2V indicates a severe state of deep discharge or internal cell failure within the 12V energy storage system. This level of depletion typically stems from a sustained parasitic draw exceeding the alternator's replenishment rate or advanced plate sulfation causing an internal short circuit. At this specific value, multiple cells have likely dropped below their critical electrochemical threshold, rendering the battery unable to maintain a nominal charge even under minimal load conditions.",
-      "effect": "Operating at 8.2V causes critical system instability as most Electronic Control Units require a minimum of 9.0V to maintain logic processing and communication over the CAN bus. This low-voltage state triggers a cascade of false fault codes, disables the starter solenoid, and risks permanent damage to the battery's chemical composition through irreversible deep discharge. Continued attempts to operate the vehicle at this voltage can overheat the alternator diodes and stress the electrical distribution network beyond designed thermal limits.",
-      "solution": "1. Perform a high-rate discharge load test or a digital conductance test to evaluate the internal health of the battery and determine if the plates are physically damaged.\n2. Execute a parasitic draw test using an ammeter in series with the negative terminal to identify malfunctioning modules that are failing to enter sleep mode.\n3. Replace the energy storage unit if it fails to hold a stabilized charge above 12.4V after a slow-saturation charging cycle of at least twelve hours.\n4. Inspect and clean all battery terminals and primary chassis grounds with a wire brush to ensure optimal electrical conductivity and prevent voltage drops.",
-      "prevention": "1. Conduct quarterly battery health assessments using a dedicated tester to monitor internal resistance and cold cranking amp capacity relative to the original specifications.\n2. Utilize a microprocessor-controlled battery maintainer if the vehicle remains stationary for more than seven consecutive days to counteract natural self-discharge and parasitic loads.\n3. Ensure the alternator drive belt tension and charging system output are verified during every scheduled oil change to maintain consistent energy replenishment.",
+      "cause": "The voltage drop to approximately 7.92V indicates a severe state of discharge or the failure of multiple internal lead-acid cells. This condition is frequently triggered by a sustained parasitic drain on the electrical system or a catastrophic failure of the alternator's diode bridge which prevents proper rectification of current. At this specific voltage level, the chemical reaction within the battery has likely reached a state of equilibrium where it can no longer support even minor electrical loads.",
+      "effect": "Operating at this critical voltage threshold results in total immobilization as there is insufficient energy to trigger the starter motor or maintain the holding coil of the solenoid. The extreme discharge initiates heavy sulfation on the lead plates, which significantly diminishes the battery's ability to hold a charge in the future. Additionally, the low voltage can trigger erratic behavior in sensitive powertrain and body control modules, leading to corrupted data packets and potential hardware resets.",
+      "solution": "1. Execute a parasitic draw test using a multimeter in series to identify any circuits remaining active after the vehicle enters sleep mode.\n2. Attempt a slow, low-amperage recovery charge using a dedicated smart charger to desulfate the internal plates if the structural integrity is still intact.\n3. Replace the energy storage unit if a load test confirms that the unit cannot sustain 9.6V for 15 seconds at half its rated cold cranking amperage.\n4. Verify the integrity of the ground straps and battery cables to ensure there is no excessive voltage drop across the primary power distribution path.",
+      "prevention": "1. Schedule a professional electrical system sweep every twelve months to check the charging voltage and ripple current produced by the alternator.\n2. Ensure that all aftermarket electronic accessories are wired into ignition-switched circuits to prevent unintended battery depletion during storage.\n3. Apply a dielectric grease or terminal protector spray to the battery posts to inhibit corrosion and maintain a low-resistance connection.",
       "diagnosisSource": "Gemini AI"
     },
-    "serviceCount": 2
+    "serviceCount": 3
   },
   "tire_pressure": {
     "id": "tire_pressure",
     "name": "Pneumatic Load",
-    "value": 32.6549022179432,
+    "value": 19.793769097415908,
     "threshold": 28.0,
     "unit": "PSI",
     "status": "critical",
@@ -86,12 +80,12 @@
     "recentlyServiced": false,
     "serviceCooldownEnd": null,
     "diagnosis": {
-      "cause": "The primary mechanical cause for the pressure drop to 19.64 PSI is likely a structural breach in the pneumatic bellows or a failure in the solenoid valve block seals. A secondary cause could be a malfunctioning height control valve that is failing to signal the compressor for additional air despite the load requirements. Electrical resistance or corrosion at the pressure sensor connector can also result in inaccurate data transmission to the control module, preventing the system from reaching the 28.0 PSI operational threshold.",
-      "effect": "Operating below the 28.0 PSI safety limit results in insufficient lift capacity, forcing the suspension to bottom out and transfer high-frequency road vibrations directly into the chassis. This lack of pneumatic damping leads to accelerated wear on the control arm bushings and puts excessive strain on the vehicle frame and drivetrain components. Continued operation under these conditions significantly increases the risk of loss of control during emergency maneuvers and may cause irreversible damage to the air compressor due to excessive duty cycles.",
-      "solution": "Step 1. Utilize an ultrasonic leak detector or soap solution to inspect the air springs and pneumatic lines for any signs of escaping air while the system is under load.\nStep 2. Use a professional-grade diagnostic tool to check the air suspension control module for fault codes related to the pressure sensors or compressor relay.\nStep 3. Replace any compromised pneumatic springs or valves and then perform a system-wide recalibration of the ride height sensors to factory specifications.\nStep 4. Test the air compressor output to ensure it can reach and sustain pressures above the 28.0 PSI threshold without overheating or excessive noise.",
-      "prevention": "1. Inspect the air bellows and pneumatic lines every 15,000 miles for signs of abrasion, dry rot, or debris accumulation that could lead to structural leaks.\n2. Replace the air dryer desiccant cartridge annually to prevent moisture buildup from corroding the internal solenoid valves and causing mechanical blockages.\n3. Ensure the height control linkages are kept clean and lubricated to prevent mechanical sticking that leads to inaccurate pressure regulation and sensor errors.",
+      "cause": "The primary cause for the pneumatic load pressure dropping below the required 28.0 PSI minimum threshold is likely a structural compromise in the air-spring bellows or a malfunction in the height control valve. This failure is frequently attributed to the degradation of rubber seals within the pneumatic manifold or a fatigued compressor that can no longer maintain the volumetric flow necessary to reach the safety limit. Additionally, extreme temperature fluctuations can cause fitting contraction, leading to a slow leak that prevents the system from sustaining the necessary load-leveling pressure.",
+      "effect": "A failure to maintain at least 28.0 PSI in the pneumatic circuit causes the vehicle to sag, which significantly reduces ground clearance and compromises the suspension's ability to absorb road impacts. This leads to the direct transfer of energy into the frame and drivetrain mounts, potentially causing stress fractures and accelerated wear on the CV joints and bushings. Furthermore, the resulting shift in the roll center and steering geometry poses a severe risk to vehicle stability, particularly during emergency braking or evasive steering maneuvers.",
+      "solution": "Step 1: Conduct a high-pressure leak test using a soapy water solution or an ultrasonic acoustic detector to identify air escape points along the lines and at the reservoir fittings.\nStep 2: Use a diagnostic scan tool to command a compressor test and monitor the pressure transducer output to verify if the 19.7 PSI reading is a mechanical reality or an electronic sensor fault.\nStep 3: Replace any leaking air bags or damaged lines and perform a system recalibration to ensure the pneumatic circuit maintains the required minimum operating pressure under all load conditions.",
+      "prevention": "Recommendation 1: Perform a quarterly inspection of all pneumatic lines for signs of heat shielding failure, abrasion, or environmental contamination.\nRecommendation 2: Replace the air system dryer and filter at the manufacturer-recommended intervals to prevent moisture from causing internal oxidation and valve sticking.\nRecommendation 3: Implement a regular schedule for checking the integrity of the air compressor mounting brackets and electrical connections to ensure consistent performance.",
       "diagnosisSource": "Gemini AI"
     },
-    "serviceCount": 1
+    "serviceCount": 2
   }
 }

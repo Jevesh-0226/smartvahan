@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 :root {
   --bg-primary: #0B1E2D;
   --bg-secondary: #0F2537;
@@ -21,21 +25,19 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: 'Outfit', sans-serif;
-  overflow-y: auto;
-  /* Changed from hidden to allow scrolling on small screens */
+  overflow: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
 .dashboard-container {
-  min-height: 100vh;
-  /* Changed from height: 100vh to allow growth */
+  height: 100vh;
   display: flex;
   flex-direction: column;
   padding: 24px;
   box-sizing: border-box;
   background: radial-gradient(circle at top right, #132A3A, #0B1E2D);
   background-attachment: fixed;
-  /* Keep gradient fixed when scrolling */
+  overflow: hidden;
 }
 
 /* Header & Status Indicator */
@@ -180,6 +182,7 @@ body {
   flex-direction: column;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
+  height: 100%;
 }
 
 /* Diagnostic Status Panel (Scroll Fix) */
@@ -544,6 +547,7 @@ body {
   gap: 10px;
   padding-top: 16px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
 }
 
 .message-input-form input {
