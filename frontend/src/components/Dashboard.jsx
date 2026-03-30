@@ -18,6 +18,14 @@ import useModeStore from '../stores/modeStore';
 import '../App.css';
 import API_URL from '../services/config';
 
+import { 
+    Thermometer, 
+    Droplets, 
+    Zap, 
+    Battery, 
+    Circle 
+} from 'lucide-react';
+
 // ─── Memoized child components ──────────────────────────────────────────────
 const MemoizedSensorCard = React.memo(SensorCard);
 const MemoizedAlertPanel = React.memo(AlertPanel);
@@ -126,35 +134,35 @@ const Dashboard = () => {
                     <MemoizedSensorCard
                         title="Engine Thermal"
                         value={sensorData.engine_temperature.toFixed(1)}
-                        unit="°C" icon="🌡️"
+                        unit="°C" icon={<Thermometer size={20} />}
                         isCritical={diagnosticReport.component_states?.engine_temperature?.flagged}
                         serviceCount={diagnosticReport.component_states?.engine_temperature?.serviceCount}
                     />
                     <MemoizedSensorCard
                         title="Liquid Pressure"
                         value={sensorData.oil_pressure.toFixed(1)}
-                        unit="PSI" icon="🛢️"
+                        unit="PSI" icon={<Droplets size={20} />}
                         isCritical={diagnosticReport.component_states?.oil_pressure?.flagged}
                         serviceCount={diagnosticReport.component_states?.oil_pressure?.serviceCount}
                     />
                     <MemoizedSensorCard
                         title="Friction Material"
                         value={sensorData.brake_wear.toFixed(1)}
-                        unit="%" icon="🛑"
+                        unit="%" icon={<Zap size={20} />}
                         isCritical={diagnosticReport.component_states?.brake_wear?.flagged}
                         serviceCount={diagnosticReport.component_states?.brake_wear?.serviceCount}
                     />
                     <MemoizedSensorCard
                         title="Energy Storage"
                         value={sensorData.battery_voltage.toFixed(2)}
-                        unit="V" icon="🔋"
+                        unit="V" icon={<Battery size={20} />}
                         isCritical={diagnosticReport.component_states?.battery_voltage?.flagged}
                         serviceCount={diagnosticReport.component_states?.battery_voltage?.serviceCount}
                     />
                     <MemoizedSensorCard
                         title="Pneumatic Load"
                         value={sensorData.tire_pressure.toFixed(1)}
-                        unit="PSI" icon="🛞"
+                        unit="PSI" icon={<Circle size={20} />}
                         isCritical={diagnosticReport.component_states?.tire_pressure?.flagged}
                         serviceCount={diagnosticReport.component_states?.tire_pressure?.serviceCount}
                     />

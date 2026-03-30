@@ -6,6 +6,7 @@
  */
 
 import React, { useCallback } from 'react';
+import { Bot, Sparkles, Zap } from 'lucide-react';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import useChatStore from '../stores/chatStore';
@@ -69,11 +70,33 @@ const ChatContainer = React.memo(() => {
         <div className="panel-container chat-container">
             <div className="diagnostic-panel">
                 <div className="panel-header-fixed">
-                    <h3 style={{ margin: 0, fontSize: '1.2rem', color: 'var(--accent-teal)' }}>
-                        SmartVahan AI Assistant
-                    </h3>
-                    <div className="chat-badge" style={{ fontSize: '0.65rem', marginTop: '4px', opacity: 0.6 }}>
-                        {mode === 'demo' ? '⚡ DEMO SIMULATION' : '✨ LIVE GEMINI CORE'}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Bot size={18} style={{ color: 'var(--accent-teal)' }} />
+                        <h3 style={{ margin: 0, fontSize: '1.2rem', color: 'var(--accent-teal)' }}>
+                            SmartVahan AI Assistant
+                        </h3>
+                    </div>
+                    <div className="chat-badge" style={{ 
+                        fontSize: '0.65rem', 
+                        marginTop: '8px', 
+                        opacity: 0.8,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        fontWeight: 600,
+                        letterSpacing: '0.03em'
+                    }}>
+                        {mode === 'demo' ? (
+                            <>
+                                <Zap size={12} fill="#3B82F6" stroke="#3B82F6" />
+                                <span style={{ color: '#60A5FA' }}>DEMO SIMULATION</span>
+                            </>
+                        ) : (
+                            <>
+                                <Sparkles size={12} fill="var(--accent-teal)" stroke="var(--accent-teal)" />
+                                <span style={{ color: 'var(--accent-teal)' }}>LIVE GEMINI CORE</span>
+                            </>
+                        )}
                     </div>
                 </div>
 

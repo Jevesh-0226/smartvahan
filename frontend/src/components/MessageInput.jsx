@@ -3,6 +3,7 @@
  */
 
 import React, { useState, useCallback } from 'react';
+import { SendHorizontal } from 'lucide-react';
 
 const MessageInput = React.memo(({ onSendMessage, disabled }) => {
     const [text, setText] = useState('');
@@ -31,9 +32,7 @@ const MessageInput = React.memo(({ onSendMessage, disabled }) => {
                 disabled={!text.trim() || disabled}
                 title="Send Message"
             >
-                <svg viewBox="0 0 24 24" width="20" height="20">
-                    <path fill="currentColor" d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
-                </svg>
+                <SendHorizontal size={20} />
             </button>
         </form>
     );

@@ -23,9 +23,9 @@ const SensorCard = React.memo(
           }}
         >
           <h3 className="sensor-title">{title}</h3>
-          <span style={{ fontSize: '1.4rem' }} aria-hidden="true">
+          <div className="icon-container" aria-hidden="true">
             {icon}
-          </span>
+          </div>
         </div>
         <div className="card-body">
           <div

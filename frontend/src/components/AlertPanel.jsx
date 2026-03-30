@@ -6,6 +6,7 @@
  */
 
 import React, { useState, useCallback, useMemo } from 'react';
+import { AlertTriangle, CheckCircle, Activity } from 'lucide-react';
 import '../App.css';
 import API_URL from '../services/config';
 
@@ -66,9 +67,12 @@ const AlertPanel = React.memo(({ componentStates, onServiceComplete }) => {
                     className="panel-header-fixed"
                     style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                 >
-                    <h3 style={{ margin: 0, fontSize: '1.2rem', color: 'var(--accent-teal)' }}>
-                        ECU Diagnostic Monitor
-                    </h3>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Activity size={18} style={{ color: 'var(--accent-teal)' }} />
+                        <h3 style={{ margin: 0, fontSize: '1.2rem', color: 'var(--accent-teal)' }}>
+                            ECU Diagnostic Monitor
+                        </h3>
+                    </div>
                     <div
                         style={{
                             fontSize: '0.65rem',
@@ -76,17 +80,25 @@ const AlertPanel = React.memo(({ componentStates, onServiceComplete }) => {
                             background: 'rgba(0,179,164,0.1)',
                             borderRadius: '4px',
                             color: 'var(--accent-teal)',
+                            fontWeight: 600
                         }}
                     >
-                        Live AI Stream
+                        LIVE AI STREAM
                     </div>
                 </div>
 
                 <div className="panel-content-scroll">
                     {flaggedComponents.length === 0 ? (
-                        <div className="healthy-state">
-                            <div className="check-icon">✓</div>
-                            <p style={{ margin: 0, fontSize: '0.9rem' }}>
+                        <div className="healthy-state" style={{ 
+                            display: 'flex', 
+                            flexDirection: 'column', 
+                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            height: '100%',
+                            opacity: 0.8
+                        }}>
+                            <CheckCircle size={48} style={{ color: 'var(--accent-green)', marginBottom: '16px' }} />
+                            <p style={{ margin: 0, fontSize: '0.95rem', fontWeight: 500 }}>
                                 System Healthy. No intervention required.
                             </p>
                         </div>
@@ -108,33 +120,38 @@ const AlertPanel = React.memo(({ componentStates, onServiceComplete }) => {
                                                 display: 'flex',
                                                 justifyContent: 'space-between',
                                                 alignItems: 'center',
-                                                marginBottom: 6,
+                                                marginBottom: 10,
                                             }}
                                         >
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                <AlertTriangle size={16} style={{ color: 'var(--accent-red)' }} />
+                                                <span
+                                                    style={{
+                                                        color: 'var(--accent-red)',
+                                                        fontWeight: 700,
+                                                        fontSize: '0.95rem',
+                                                        letterSpacing: '0.02em'
+                                                    }}
+                                                >
+                                                    {comp.name.toUpperCase()}
+                                                </span>
+                                            </div>
                                             <span
                                                 style={{
-                                                    color: 'var(--accent-red)',
-                                                    fontWeight: 700,
-                                                    fontSize: '0.95rem',
-                                                }}
-                                            >
-                                                ⚠ {comp.name.toUpperCase()}
-                                            </span>
-                                            <span
-                                                style={{
-                                                    fontSize: '0.7rem',
+                                                    fontSize: '0.65rem',
                                                     color: sourceStyle.color,
                                                     background: sourceStyle.background,
-                                                    padding: '2px 6px',
+                                                    padding: '2px 8px',
                                                     borderRadius: '4px',
+                                                    fontWeight: 600
                                                 }}
                                             >
-                                                {comp.diagnosis?.diagnosisSource || 'Analyzing...'}
+                                                {comp.diagnosis?.diagnosisSource?.toUpperCase() || 'ANALYZING...'}
                                             </span>
                                         </div>
-                                        <div style={{ fontSize: '0.85rem', color: 'var(--text-primary)' }}>
+                                        <div style={{ fontSize: '0.85rem', color: 'var(--text-primary)', marginLeft: '24px' }}>
                                             Anomaly detected at{' '}
-                                            <strong>
+                                            <strong style={{ color: 'var(--accent-red)' }}>
                                                 {comp.value.toFixed(1)}
                                                 {comp.unit}
                                             </strong>

@@ -11,6 +11,7 @@
  */
 
 import React, { useCallback } from 'react';
+import { Play, Zap } from 'lucide-react';
 import useModeStore from '../stores/modeStore';
 
 const ModeToggle = React.memo(() => {
@@ -33,14 +34,13 @@ const ModeToggle = React.memo(() => {
             aria-label={`Current mode: ${isDemo ? 'Demo' : 'Real'}. Click to switch.`}
             aria-pressed={!isDemo}
         >
-            {/* GPU-accelerated indicator dot */}
-            <span className="status-dot" aria-hidden="true" />
+            {isDemo ? <Play size={14} fill="currentColor" /> : <Zap size={14} fill="currentColor" />}
             <span className="mode-label">
                 {isDemo ? 'Demo Mode' : 'Real Mode'}
             </span>
             {/* Small badge indicating AI source */}
             <span className="mode-badge" aria-hidden="true">
-                {isDemo ? 'Simulated' : 'Live AI'}
+                {isDemo ? 'SIMULATED' : 'LIVE AI'}
             </span>
         </button>
     );

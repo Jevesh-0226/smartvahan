@@ -8,11 +8,24 @@
 import React from 'react';
 import ModeToggle from './ModeToggle';
 
+import { Activity } from 'lucide-react';
+
 const Navbar = React.memo(({ status, isCritical }) => {
     return (
         <header className="dashboard-header">
             <div className="header-content">
-                <div className="brand">
+                <div className="brand" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ 
+                        background: 'rgba(0, 179, 164, 0.1)', 
+                        padding: '8px', 
+                        borderRadius: '10px', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center',
+                        border: '1px solid rgba(0, 179, 164, 0.2)'
+                    }}>
+                        <Activity size={24} color="var(--accent-teal)" />
+                    </div>
                     <h1>
                         SmartVahan <span className="subtitle">Vehicle Health Monitor</span>
                     </h1>

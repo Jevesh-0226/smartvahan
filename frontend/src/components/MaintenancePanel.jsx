@@ -6,6 +6,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { History, Trash2 } from 'lucide-react';
 import '../App.css';
 import API_URL from '../services/config';
 
@@ -69,23 +70,26 @@ const MaintenancePanel = React.memo(() => {
                     className="panel-header-fixed"
                     style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                 >
-                    <h3 style={{ margin: 0, fontSize: '1.2rem', color: 'var(--accent-teal)' }}>
-                        Maintenance History Logs
-                    </h3>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                        Active Records: {history.length}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <History size={18} style={{ color: 'var(--accent-teal)' }} />
+                        <h3 style={{ margin: 0, fontSize: '1.2rem', color: 'var(--accent-teal)' }}>
+                            Maintenance History Logs
+                        </h3>
+                    </div>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
+                        ACTIVE RECORDS: {history.length}
                     </span>
                 </div>
 
                 <div className="panel-content-scroll">
                     {loading ? (
-                        <div className="healthy-state" style={{ height: '200px' }}>
+                        <div className="healthy-state" style={{ height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
                                 Loading records...
                             </p>
                         </div>
                     ) : history.length === 0 ? (
-                        <div className="healthy-state" style={{ height: '200px' }}>
+                        <div className="healthy-state" style={{ height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <p style={{ margin: 0, fontSize: '0.9rem' }}>
                                 Fleet maintenance database is empty.
                             </p>
@@ -103,24 +107,28 @@ const MaintenancePanel = React.memo(() => {
                                 >
                                     <div className="history-comp-name">{record.component_name}</div>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                        <span
+                                        <div
                                             style={{
                                                 color: 'var(--accent-teal)',
-                                                fontSize: '0.7rem',
-                                                fontWeight: 600,
-                                                opacity: 0.8,
+                                                fontSize: '0.65rem',
+                                                fontWeight: 700,
+                                                background: 'rgba(0, 179, 164, 0.1)',
+                                                padding: '2px 8px',
+                                                borderRadius: '4px',
+                                                letterSpacing: '0.03em'
                                             }}
                                         >
                                             {record.diagnosisSource === 'Gemini Live'
-                                                ? '✓ LIVE AI VERIFIED'
-                                                : record.diagnosisSource}
-                                        </span>
+                                                ? 'GEMINI AI VERIFIED'
+                                                : record.diagnosisSource?.toUpperCase()}
+                                        </div>
                                         <button
                                             className="delete-record-btn"
                                             title="Delete Record"
                                             onClick={(e) => handleDelete(e, record.id)}
+                                            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                         >
-                                            🗑️
+                                            <Trash2 size={14} style={{ color: 'var(--accent-red)' }} />
                                         </button>
                                     </div>
                                 </div>

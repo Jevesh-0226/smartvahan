@@ -134,13 +134,48 @@ body {
 
 .sensor-card:hover {
   border-color: var(--accent-teal);
-  transform: translateY(-4px);
-  box-shadow: var(--glow-teal);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4), var(--glow-teal);
 }
 
 .sensor-card.critical {
-  border-color: var(--accent-red);
+  border-color: rgba(255, 77, 77, 0.4);
   box-shadow: var(--glow-red);
+  background: linear-gradient(145deg, var(--bg-card), rgba(255, 77, 77, 0.05));
+}
+
+.icon-container {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--accent-teal);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.02);
+}
+
+.sensor-card:hover .icon-container {
+  transform: rotate(5deg) scale(1.1);
+  background: rgba(0, 179, 164, 0.1);
+  border-color: rgba(0, 179, 164, 0.2);
+  color: #5EEAD4;
+}
+
+.sensor-card.critical .icon-container {
+  color: var(--accent-red);
+  background: rgba(255, 77, 77, 0.1);
+  border-color: rgba(255, 77, 77, 0.2);
+  animation: icon-pulse-red 2s infinite;
+}
+
+@keyframes icon-pulse-red {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
 }
 
 .sensor-title {
